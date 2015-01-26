@@ -169,7 +169,7 @@ grunt.initConfig({
           level: 5
         },{
           name: "high",
-          level: 10
+          level: 10,
           suffix: "xlarge",
           quality: 60
         }]

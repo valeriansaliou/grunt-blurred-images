@@ -111,14 +111,12 @@ module.exports = function(grunt) {
     // Valid values = 1, '1%', '1', '1%', '1.1%', '11.11111%', '111111%'
     // Invalid values = -1, '1.1.1%', '1a', 'a1'
     var pcRegExp = /^[0-9]*\.?[0-9]+%?$/,
-      pxRegExp = /^[0-9]+(?:px)?$/,
-      isValid = false;
+        isValid = false;
 
     if (level) {
       // check if we have a valid percentage value
       if (!!(level || 0).toString().match(pcRegExp)) {
         isValid = true;
-      // check if we have a valid pixel value
       } else {
         grunt.log.error('Level value is not valid.');
       }
@@ -375,7 +373,7 @@ module.exports = function(grunt) {
 
       var blurOptions = _.extend({}, options, s);
 
-      if (!isValidLevel(blurOptions.levle)) {
+      if (!isValidLevel(blurOptions.level)) {
         // allow task to be by-passed if no images
         return grunt.log.warn('Level is invalid (' + blurOptions.level + ')');
       }
