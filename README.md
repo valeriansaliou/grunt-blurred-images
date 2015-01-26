@@ -227,6 +227,6 @@ NOTE: for grunt-blurred-images to pick up images within subdirectories you must 
 
 ## Acknowledgements
 
-This module is based on the work of @andismith on [grunt-responsive-images](https://www.npmjs.com/package/grunt-responsive-images).
+This module is based on the work of [@andismith](https://www.npmjs.com/~andismith) on [grunt-responsive-images](https://www.npmjs.com/package/grunt-responsive-images).
 
 I am deeply thankful to this guy for his thorough work on grunt-responsive-images, which helped save a lot of time while developing grunt-blurred-images.
