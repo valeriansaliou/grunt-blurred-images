@@ -78,7 +78,7 @@ grunt.initConfig({
 
 * **options.levels**<br />
   *Type:* `Array`<br />
-  *Default:* `[{ name: 'low', level: 1 },{ name: 'medium', level: 4 },{ name: 'high', level: 8 }]`<br />
+  *Default:* `[{ name: 'low', level: 1 }, { name: 'medium', level: 4 }, { name: 'high', level: 8 }]`<br />
   *Version:* 0.1.0 and above
 
   An array of objects containing the levels and settings we want to blur our image.
@@ -88,7 +88,7 @@ grunt.initConfig({
 levels: [{
       name: "low",
       level: 2
-},{
+}, {
       name: "high",
       level: 10
   }]
@@ -109,7 +109,7 @@ levels: [{
     *Default:* `true`<br />
     *Version:* 0.1.0 and above
 
-    If `rename` is set to `false`, then at this size the file will not be renamed, but will instead keep its original name. Suffixes will still be applied.
+    If `rename` is set to `false`, then at this level the file will not be renamed, but will instead keep its original name. Suffixes will still be applied.
 
   * **quality**<br />
     *Type:* `Number`<br />
@@ -138,7 +138,7 @@ levels: [{
 ### Usage Examples
 
 #### Default Options
-Using the default options will produce 3 responsive images - one at 320px wide, one at 640px wide and one at 1024px wide.
+Using the default options will produce 3 blurred images - one at 1% blur, one at 5% blur and one at 9% blur.
 
 ```js
 grunt.initConfig({
@@ -164,10 +164,10 @@ grunt.initConfig({
         levels: [{
           name: 'low',
           level: 2
-        },{
+        }, {
           name: 'medium',
           level: 5
-        },{
+        }, {
           name: "high",
           level: 10,
           suffix: "xlarge",
@@ -186,7 +186,7 @@ grunt.initConfig({
 ```
 
 #### Custom Destination
-If you would like to output each image size to a different directory, you can do so with custom_dest. For example:
+If you would like to output each image level to a different directory, you can do so with custom_dest. For example:
 
 ```js
 grunt.initConfig({
@@ -196,10 +196,10 @@ grunt.initConfig({
         levels: [{
           name: 'low',
           level: 2
-        },{
+        }, {
           name: 'medium',
           level: 5
-        },{
+        }, {
           name: "high",
           level: 10
           suffix: "xlarge",
@@ -221,7 +221,7 @@ You can use `{%= level %}`, `{%= name %}` or `{%= path %}` as a delimiter.
 
 Please note that `{%= level %}` and `{%= name %}` are only available if they are set in the object literal that you use to set each generated level option.
 
-The `{%= path %}` value contains additional directory structure from the current working directory (cwd in files array) to each image.  Using `{%= path %}` allows any complex directory structure to persist into the rendered responsive images directory.
+The `{%= path %}` value contains additional directory structure from the current working directory (cwd in files array) to each image.  Using `{%= path %}` allows any complex directory structure to persist into the rendered blurred images directory.
 
 NOTE: for grunt-blurred-images to pick up images within subdirectories you must set your files.src property to `**/*.{jpg,gif,png}`.
 

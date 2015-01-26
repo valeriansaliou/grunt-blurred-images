@@ -1,13 +1,13 @@
 /**
  * grunt-blurred-images
- * https://github.com/andismith/grunt-blurred-images
+ * https://github.com/valeriansaliou/grunt-blurred-images
  *
  * Copyright (c) 2015 Valérian Saliou
  * Licensed under the MIT license.
  *
  * Test suite for Grunt Blurred Images
  *
- * @author Andi Smith (http://twitter.com/andismith)
+ * @author Valérian Saliou (https://valeriansaliou.name/)
  * @version 1.0
  */
 
@@ -139,9 +139,9 @@
       var actualPath = 'tmp/default_options/',
           expectedPath = 'test/expected/default_options/',
           files = [
-            'minions-small.jpg',
+            'minions-low.jpg',
             'minions-medium.jpg',
-            'minions-large.jpg'
+            'minions-high.jpg'
           ];
 
       checkImages(actualPath, expectedPath, files, test);
@@ -150,15 +150,15 @@
       var actualPath = 'tmp/file_wildcard_options/',
           expectedPath = 'test/expected/file_wildcard_options/',
           files = [
-            'sonic-small.png',
+            'sonic-low.png',
             'sonic-medium.png',
-            'sonic-large.png',
-            'mario-yoshi-small.jpg',
+            'sonic-high.png',
+            'mario-yoshi-low.jpg',
             'mario-yoshi-medium.jpg',
-            'mario-yoshi-large.jpg',
-            'mickey-mouse-small.gif',
+            'mario-yoshi-high.jpg',
+            'mickey-mouse-low.gif',
             'mickey-mouse-medium.gif',
-            'mickey-mouse-large.gif'
+            'mickey-mouse-high.gif'
           ];
 
       checkImages(actualPath, expectedPath, files, test);
@@ -167,57 +167,10 @@
       var actualPath = 'tmp/custom_options/',
           expectedPath = 'test/expected/custom_options/',
           files = [
-            'panther-small.jpg',
-            'panther-220.jpg',
-            'panther-large.jpg',
-            'panther-large_x2.jpg'
-          ];
-
-      checkImages(actualPath, expectedPath, files, test);
-    },
-    pixel_sizes: function(test) {
-      var actualPath = 'tmp/pixel_sizes/',
-          expectedPath = 'test/expected/pixel_sizes/',
-          files = [
-            'magikarp-10.png',
-            'magikarp-50x50.png',
-            'magikarp-200x500.png',
-            'meowth-10.jpg',
-            'meowth-50x50.jpg',
-            'meowth-200x500.jpg'
-          ];
-
-      checkImages(actualPath, expectedPath, files, test);
-    },
-    percentage_sizes: function(test) {
-      var actualPath = 'tmp/percentage_sizes/',
-          expectedPath = 'test/expected/percentage_sizes/',
-          files = [
-            'captain-planet-10pc.jpg',
-            'captain-planet-50pcx50pc.jpg',
-            'captain-planet-200pcx80pc.jpg'
-          ];
-
-      checkImages(actualPath, expectedPath, files, test);
-    },
-    percentage_sizes_custom_unit: function(test) {
-      var actualPath = 'tmp/percentage_sizes_custom_unit/',
-          expectedPath = 'test/expected/percentage_sizes_custom_unit/',
-          files = [
-            'transformers-10abc123.jpg',
-            'transformers-50abc123x50abc123.jpg',
-            'transformers-200abc123x80abc123.jpg'
-          ];
-
-      checkImages(actualPath, expectedPath, files, test);
-    },
-    custom_multiply_unit: function(test) {
-      var actualPath = 'tmp/custom_multiply_unit/',
-          expectedPath = 'test/expected/custom_multiply_unit/',
-          files = [
-            'scooby-doo-10pc.jpg',
-            'scooby-doo-50pcabc12350pc.jpg',
-            'scooby-doo-800abc123450.jpg'
+            'panther-low.jpg',
+            'panther-high_4pc.jpg',
+            'panther-high.jpg',
+            'panther-highest.jpg'
           ];
 
       checkImages(actualPath, expectedPath, files, test);
@@ -226,9 +179,9 @@
       var actualPath = 'tmp/custom_dest_level/',
           expectedPath = 'test/expected/custom_dest_level/',
           files = [
-            '1/cedric_sneer.jpg',
-            '5/cedric_sneer.jpg',
-            '9/cedric_sneer.jpg'
+            '3/cedric_sneer.jpg',
+            '6/cedric_sneer.jpg',
+            '10/cedric_sneer.jpg'
           ];
 
       checkImages(actualPath, expectedPath, files, test);
@@ -248,8 +201,12 @@
       var actualPath = 'tmp/custom_dest_path/',
           expectedPath = 'test/expected/custom_dest_path/',
           files = [
-            '320/battle-cat.jpg',
-            '640/sub_directory/battle-dog.jpg'
+            '1/battle-cat.jpg',
+            '1/sub_directory/battle-dog.jpg',
+            '5/battle-cat.jpg',
+            '5/sub_directory/battle-dog.jpg',
+            '9/battle-cat.jpg',
+            '9/sub_directory/battle-dog.jpg'
           ];
 
       checkImages(actualPath, expectedPath, files, test);
@@ -268,9 +225,9 @@
       var actualPath = 'tmp/global_quality/',
           expectedPath = 'test/expected/global_quality/',
           files = [
-            'night_garden-320.jpg',
-            'night_garden-640.jpg',
-            'night_garden-1024.jpg'
+            'night_garden-3pc.jpg',
+            'night_garden-6pc.jpg',
+            'night_garden-10pc.jpg'
           ];
 
       checkImages(actualPath, expectedPath, files, test);
@@ -279,7 +236,8 @@
       var actualPath = 'tmp/animated/',
           expectedPath = 'test/expected/animated/',
           files = [
-            'olaf-320.gif'
+            'olaf-3pc.gif',
+            'cat_fun-3pc.gif'
           ];
 
       checkImages(actualPath, expectedPath, files, test);
@@ -288,12 +246,12 @@
       var actualPath = 'tmp/new_files_only/',
           expectedPath = 'test/expected/new_files_only/',
           files = [
-            'gummi-bears-100.jpg',
-            'gummi-bears-200.jpg',
-            'gummi-bears-300.jpg',
-            'darkwing-duck-100.jpg',
-            'darkwing-duck-200.jpg',
-            'darkwing-duck-300.jpg'
+            'gummi-bears-10pc.jpg',
+            'gummi-bears-20pc.jpg',
+            'gummi-bears-30pc.jpg',
+            'darkwing-duck-10pc.jpg',
+            'darkwing-duck-20pc.jpg',
+            'darkwing-duck-30pc.jpg'
           ];
 
       checkImages(actualPath, expectedPath, files, test);

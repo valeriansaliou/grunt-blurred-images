@@ -99,7 +99,7 @@ module.exports = function(grunt) {
             quality: 50
           }, {
             level: 5,
-            name: "highst",
+            name: "highest",
             quality: 50
           }]
         },
@@ -187,28 +187,6 @@ module.exports = function(grunt) {
         files: [{
           expand: true,
           src: ['rename/**.{jpg,gif,png}'],
-          cwd: 'test/assets/',
-          dest: 'tmp/'
-        }]
-      },
-
-      filters: {
-        options: {
-          levels: [{
-            filter: 'Point',
-            level: 3
-          }, {
-            filter: 'Point',
-            level: 6
-          }, {
-            filter: 'Point',
-            level: 10
-          }]
-        },
-
-        files: [{
-          expand: true,
-          src: ['filters/**/*.{jpg,gif,png}'],
           cwd: 'test/assets/',
           dest: 'tmp/'
         }]

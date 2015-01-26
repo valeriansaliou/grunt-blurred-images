@@ -41,8 +41,7 @@ module.exports = function(grunt) {
   };
 
   var DEFAULT_UNIT_OPTIONS = {
-    percentage: 'pc',
-    multiply: 'x'
+    percentage: 'pc'
   };
 
   // details about the GFX rendering engines being used
@@ -144,7 +143,7 @@ module.exports = function(grunt) {
     if (properties.name) {
       return properties.name;
     } else if (properties.level) {
-      return parseFloat(properties.level) + 'pc' + options.units.multiply;
+      return parseFloat(properties.level) + 'pc';
     }
   };
 
