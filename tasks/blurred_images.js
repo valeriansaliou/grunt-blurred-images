@@ -68,7 +68,7 @@ module.exports = function(grunt) {
   };
 
   var cache = {},
-    gfxEngine = {};
+      gfxEngine = {};
 
   /**
    * Set the engine to ImageMagick or GraphicsMagick
@@ -284,16 +284,28 @@ module.exports = function(grunt) {
     return (!grunt.file.exists(dstPath));
   };
 
-  var processImage = function(srcPath, dstPath, blurOptions, tally, callback) {
+  var processImage = function(srcPath, dstPath, sizeOptions, tally, callback) {
     var image = gfxEngine(srcPath);
 
     image.identify(function(err, data) {
-      if(err){
-        handleImageErrors(err, blurOptions.engine);
+      if(err) {
+        handleImageErrors(err, sizeOptions.engine);
       }
 
-      if (!isAnimatedGif(data, dstPath, blurOptions.tryAnimated)) {
-        // Image blur adjust
+      if(!isAnimatedGif(data, dstPath, sizeOptions.tryAnimated)) {
+        image.resize(sizeOptions.level)
+             .quality(sizeOptions.quality);
+
+        image.write(dstPath, function (error) {
+          if (error) {
+            handleImageErrors(error, sizeOptions.engine);
+          } else {
+            grunt.verbose.ok('Blurred Image: ' + srcPath + ' now '+ dstPath);
+            tally[sizeOptions.id]++;
+          }
+
+          return callback();
+        });
       } else {
         return callback();
       }
