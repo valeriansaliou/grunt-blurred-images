@@ -291,7 +291,7 @@ module.exports = function(grunt) {
       }
 
       if(!isAnimatedGif(data, dstPath, sizeOptions.tryAnimated)) {
-        image.resize(sizeOptions.level)
+        image.blur(sizeOptions.level)
              .quality(sizeOptions.quality);
 
         image.write(dstPath, function (error) {
