@@ -1,6 +1,6 @@
 # grunt-blurred-image
 
-> Produces images at different sizes
+> Produce blurred versions of images. Used to reproduce Medium blur-on-scroll effect.
 
 [![build status](https://ci.hakuma.holdings/projects/79/status.png?ref=master)](https://ci.hakuma.holdings/projects/79?ref=master)
 
