@@ -5,7 +5,7 @@
  * Copyright (c) 2015 Valérian Saliou
  * Licensed under the MIT license.
  *
- * Test suite for Grunt Responsive Images
+ * Test suite for Grunt Blurred Images
  *
  * @author Andi Smith (http://twitter.com/andismith)
  * @version 1.0
@@ -64,17 +64,15 @@
           } else {
             // check if we have a match
             if ((actualProp.Compression === expectedProp.Compression) &&
-              (actualProp.size.width === expectedProp.size.width) &&
-              (actualProp.size.height === expectedProp.size.height) &&
               (actualProp['JPEG-Quality'] === expectedProp['JPEG-Quality'])) {
               deferred.resolve(true);
             } else {
               deferred.reject(filename + ': ' +
-                'actual image (' + actualProp.compression + ' ' + actualProp.size.width +
-                'x' + actualProp.size.height + ' - Q:' + actualProp.quality +
+                'actual image (' + actualProp.compression + ' ' + actualProp.size.level +
+                '% blur - Q:' + actualProp.quality +
                 ') and ' +
-                'expected image (' + expectedProp.compression + ' ' + expectedProp.size.width +
-                'x' + expectedProp.size.height + ' - Q:' + expectedProp.quality +
+                'expected image (' + expectedProp.compression + ' ' + expectedProp.size.level +
+                '% blur - Q:' + expectedProp.quality +
                 ') should match');
             }
           }
@@ -136,7 +134,7 @@
 
 
   // List of tests to be run
-  exports.responsive_images = {
+  exports.blurred_images = {
     default_options: function(test) {
       var actualPath = 'tmp/default_options/',
           expectedPath = 'test/expected/default_options/',
@@ -191,17 +189,6 @@
 
       checkImages(actualPath, expectedPath, files, test);
     },
-    pixel_sizes_custom_unit: function(test) {
-      var actualPath = 'tmp/pixel_sizes_custom_unit/',
-          expectedPath = 'test/expected/pixel_sizes_custom_unit/',
-          files = [
-            'popeye-20abc123.jpg',
-            'popeye-80abc123x50abc123.jpg',
-            'popeye-500abc123x500abc123.jpg'
-          ];
-
-      checkImages(actualPath, expectedPath, files, test);
-    },
     percentage_sizes: function(test) {
       var actualPath = 'tmp/percentage_sizes/',
           expectedPath = 'test/expected/percentage_sizes/',
@@ -235,13 +222,13 @@
 
       checkImages(actualPath, expectedPath, files, test);
     },
-    custom_dest_width: function(test) {
-      var actualPath = 'tmp/custom_dest_width/',
-          expectedPath = 'test/expected/custom_dest_width/',
+    custom_dest_level: function(test) {
+      var actualPath = 'tmp/custom_dest_level/',
+          expectedPath = 'test/expected/custom_dest_level/',
           files = [
-            '320/cedric_sneer.jpg',
-            '640/cedric_sneer.jpg',
-            '1024/cedric_sneer.jpg'
+            '1/cedric_sneer.jpg',
+            '5/cedric_sneer.jpg',
+            '9/cedric_sneer.jpg'
           ];
 
       checkImages(actualPath, expectedPath, files, test);
@@ -274,17 +261,6 @@
           'minions.jpg',
           'minions-half.jpg'
         ];
-
-      checkImages(actualPath, expectedPath, files, test);
-    },
-    filters: function(test) {
-      var actualPath = 'tmp/filters/',
-          expectedPath = 'test/expected/filters/',
-          files = [
-            'yoshi-320.png',
-            'yoshi-640.png',
-            'yoshi-1024.png'
-          ];
 
       checkImages(actualPath, expectedPath, files, test);
     },

@@ -33,19 +33,22 @@ module.exports = function(grunt) {
       options: {
         engine: 'im'
       },
+
       default_options: {
-        options: {
-        },
+        options: {},
+
         files: {
           'tmp/default_options/minions.jpg': 'test/assets/default_options/minions.jpg'
         }
       },
+
       no_files: {
         options: {
-          sizes: [{
-            width: 320
+          levels: [{
+            level: 2
           }]
         },
+
         files: [{
           expand: true,
           src: ['no_files/**/*.{jpg,gif,png}'],
@@ -53,25 +56,21 @@ module.exports = function(grunt) {
           dest: 'tmp/'
         }]
       },
+
       file_wildcard_options: {
         options: {
-          sizes: [{
-            aspectRatio: false,
-            height: 240,
-            name: 'small',
-            width: 320
-          },{
-            aspectRatio: false,
-            height: 480,
+          levels: [{
+            name: 'low',
+            level: 2
+          }, {
             name: 'medium',
-            width: 640
-          },{
-            aspectRatio: false,
-            height: 768,
-            name: 'large',
-            width: 1024
+            level: 4
+          }, {
+            name: 'high',
+            level: 8
           }]
         },
+
         files: [{
           expand: true,
           src: ['file_wildcard_options/**.{jpg,gif,png}'],
@@ -79,31 +78,32 @@ module.exports = function(grunt) {
           dest: 'tmp/'
         }]
       },
+
       custom_options: {
         options: {
-          sizes: [{
-            width: 110,
-            name: "small",
+          levels: [{
+            level: 1,
+            name: "low",
             quality: 40
-          },{
-            width: 220,
+          }, {
+            level: 2,
             quality: 100
-          },{
-            width: 330,
-            name: "large",
+          }, {
+            level: 3,
+            name: "high",
             quality: 80
-          },{
-            width: 660,
-            name: "large",
-            suffix: "_x2",  // retina gfx
+          }, {
+            level: 4,
+            name: "high",
+            suffix: "_4pc",
             quality: 50
-          },{
-            createNoScaledImage: true,
-            width: 1660,
-            name: "largest",
+          }, {
+            level: 5,
+            name: "highst",
             quality: 50
           }]
         },
+
         files: [{
           expand: true,
           src: ['custom_options/**.{jpg,gif,png}'],
@@ -111,152 +111,40 @@ module.exports = function(grunt) {
           dest: 'tmp/'
         }]
       },
-      pixel_sizes: {
+
+      custom_dest_level: {
         options: {
-          sizes: [{
-              aspectRatio: false,
-              width: '10px'
-            },{
-              aspectRatio: false,
-              height: '50px',
-              width: '50px'
-            },{
-              aspectRatio: false,
-              height: '500px',
-              width: '200px'
-            }]
-        },
-        files: [{
-          expand: true,
-          src: ['pixel_sizes/**/*.{jpg,gif,png}'],
-          cwd: 'test/assets/',
-          dest: 'tmp/'
-        }]
-      },
-      pixel_sizes_custom_unit: {
-        options: {
-          units: {
-            pixel: 'abc123'
-          },
-          sizes: [{
-            aspectRatio: false,
-            width: '20px',
-          },{
-            aspectRatio: false,
-            height: '50px',
-            width: '80px',
-          },{
-            aspectRatio: false,
-            height: '500px',
-            width: '500px'
+          levels: [{
+            level: 3
+          }, {
+            level: 6
+          }, {
+            level: 10
           }]
         },
-        files: [{
-          expand: true,
-          src: ['pixel_sizes_custom_unit/**/*.{jpg,gif,png}'],
-          cwd: 'test/assets/',
-          dest: 'tmp/'
-        }]
-      },
-      percentage_sizes: {
-        options: {
-          sizes: [{
-            width: '10%',
-          },{
-            height: '50%',
-            width: '50%',
-          },{
-            height: '80%',
-            width: '200%'
-          }]
-        },
-        files: [{
-          expand: true,
-          src: ['percentage_sizes/**/*.{jpg,gif,png}'],
-          cwd: 'test/assets/',
-          dest: 'tmp/'
-        }]
-      },
-      percentage_sizes_custom_unit: {
-        options: {
-          units: {
-            percentage: 'abc123'
-          },
-          sizes: [{
-            width: '10%',
-          },{
-            height: '50%',
-            width: '50%',
-          },{
-            height: '80%',
-            width: '200%'
-          }]
-        },
-        files: [{
-          expand: true,
-          src: ['percentage_sizes_custom_unit/**/*.{jpg,gif,png}'],
-          cwd: 'test/assets/',
-          dest: 'tmp/'
-        }]
-      },
-      custom_multiply_unit: {
-        options: {
-          units: {
-            multiply: 'abc123'
-          },
-          sizes: [{
-            width: '10%',
-          },{
-            height: '50%',
-            width: '50%',
-          },{
-            height: '450px',
-            width: '800px'
-          }]
-        },
-        files: [{
-          expand: true,
-          src: ['custom_multiply_unit/**/*.{jpg,gif,png}'],
-          cwd: 'test/assets/',
-          dest: 'tmp/'
-        }]
-      },
-      custom_dest_width: {
-        options: {
-          sizes: [{
-            aspectRatio: false,
-            upscale: true,
-            width: 320
-          },{
-            aspectRatio: false,
-            upscale: true,
-            width: 640
-          },{
-            aspectRatio: false,
-            upscale: true,
-            width: 1024
-          }]
-        },
+
         files: [{
           expand: true,
           src: ['**/*.{jpg,gif,png}'],
-          cwd: 'test/assets/custom_dest_width/',
-          custom_dest: 'tmp/custom_dest_width/{%= width %}/'
+          cwd: 'test/assets/custom_dest_level/',
+          custom_dest: 'tmp/custom_dest_level/{%= level %}/'
         }]
       },
+
       custom_dest_name: {
         options: {
-          sizes: [{
-            width: 100,
+          levels: [{
+            level: 1,
             name: "leo"
-          },{
-            width: 200,
+          }, {
+            level: 2,
             name: "donnie"
-          },{
-            width: 400,
+          }, {
+            level: 4,
             name: "raph"
           }]
         },
+
         files: [{
           expand: true,
           src: ['**/*.{jpg,gif,png}'],
@@ -264,34 +152,38 @@ module.exports = function(grunt) {
           custom_dest: 'tmp/custom_dest_name/{%= name %}/'
         }]
       },
+
       custom_dest_path: {
         options: {
-          sizes: [{
-            width: 320
-          },{
-            width: 640
-          },{
-            width: 1024
+          levels: [{
+            level: 1
+          }, {
+            level: 5
+          }, {
+            level: 9
           }]
         },
+
         files: [{
           expand: true,
           src: ['**/*.{jpg,gif,png}'],
           cwd: 'test/assets/custom_dest_path/',
-          custom_dest: 'tmp/custom_dest_path/{%= width %}/{%= path %}'
+          custom_dest: 'tmp/custom_dest_path/{%= level %}/{%= path %}'
         }]
       },
+
       rename: {
         options: {
-          sizes: [{
-            width: "100%",
+          levels: [{
+            level: "100%",
             name: "unchanged",
             rename: false
-          },{
-            width: "50%",
+          }, {
+            level: "50%",
             name: "half"
           }]
         },
+
         files: [{
           expand: true,
           src: ['rename/**.{jpg,gif,png}'],
@@ -299,22 +191,21 @@ module.exports = function(grunt) {
           dest: 'tmp/'
         }]
       },
+
       filters: {
         options: {
-          sizes: [{
+          levels: [{
             filter: 'Point',
-            upscale: true,
-            width: 320
-          },{
+            level: 3
+          }, {
             filter: 'Point',
-            upscale: true,
-            width: 640
-          },{
+            level: 6
+          }, {
             filter: 'Point',
-            upscale: true,
-            width: 1024
+            level: 10
           }]
         },
+
         files: [{
           expand: true,
           src: ['filters/**/*.{jpg,gif,png}'],
@@ -322,18 +213,20 @@ module.exports = function(grunt) {
           dest: 'tmp/'
         }]
       },
+
       global_quality: {
         options: {
           tryAnimated: true,
           quality: 80,
-          sizes: [{
-            width: 320
-          },{
-            width: 640
-          },{
-            width: 1024
+          levels: [{
+            level: 3
+          }, {
+            level: 6
+          }, {
+            level: 10
           }]
         },
+
         files: [{
           expand: true,
           src: ['global_quality/**/*.{jpg,gif,png}'],
@@ -341,14 +234,16 @@ module.exports = function(grunt) {
           dest: 'tmp/'
         }]
       },
+
       animated: {
         options: {
           tryAnimated: true,
           quality: 80,
-          sizes: [{
-            width: 320
+          levels: [{
+            level: 3
           }]
         },
+
         files: [{
           expand: true,
           src: ['animated/**/*.gif'],
@@ -356,16 +251,16 @@ module.exports = function(grunt) {
           dest: 'tmp/'
         }]
       },
+
       new_files_only_prep: {
         options: {
-          sizes: [{
-              aspectRatio: false,
-              width: '200px'
-            },{
-              aspectRatio: false,
-              width: '300px'
+          levels: [{
+              level: '20%'
+            }, {
+              level: '30%'
             }]
         },
+
         files: [{
           expand: true,
           src: ['new_files_only/gummi-bears.jpg'],
@@ -373,20 +268,20 @@ module.exports = function(grunt) {
           dest: 'tmp/'
         }]
       },
+
       new_files_only: {
         options: {
           newFilesOnly: true,
-          sizes: [{
-              aspectRatio: false,
-              width: '100px'
-            },{
-              aspectRatio: false,
-              width: '200px'
-            },{
-              aspectRatio: false,
-              width: '300px'
+
+          levels: [{
+              level: '10%'
+            }, {
+              level: '20%'
+            }, {
+              level: '30%'
             }]
         },
+
         files: [{
           expand: true,
           src: ['new_files_only/**/*.{jpg,gif,png}'],

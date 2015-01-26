@@ -5,7 +5,7 @@
  * Copyright (c) 2015 Valérian Saliou
  * Licensed under the MIT license.
  *
- * Create images at different sizes for responsive websites.
+ * Create images at different blur levels.
  *
  * @author Valérian Saliou (https://valeriansaliou.name/)
  * @version 0.1.0
@@ -21,31 +21,27 @@ module.exports = function(grunt) {
   var path  = require('path');
 
   var DEFAULT_OPTIONS = {
-    aspectRatio: true,          // maintain the aspect ratio of the image (when width and height are supplied)
-    createNoScaledImage: false, // whether to create files if upscale is set to false and large sizes are specified
     engine: 'gm',               // gm or im
-    gravity: 'Center',          // gravity for cropped images: NorthWest, North, NorthEast, West, Center, East, SouthWest, South, or SouthEast
-    newFilesOnly: true,         // NEW VALUE - whether to only run for new files/sizes only
+    newFilesOnly: true,         // NEW VALUE - whether to only run for new files/levels only
     quality: 100,               // value between 1 and 100
     rename: true,               // whether file should keep its name
-    separator: '-',             // separator between name and filesize
-    tryAnimated: false,         // DEFAULT CHANGED - whether to try to resize animated files
-    upscale: false,             // whether to upscale the image
-    sizes: [{
-      name: 'small',
-      width: 320
+    separator: '-',             // separator between name and blur level
+    tryAnimated: false,         // DEFAULT CHANGED - whether to try to blur animated files
+
+    levels: [{
+      name: 'low',
+      level: 1
     },{
       name: 'medium',
-      width: 640
+      level: 5
     },{
-      name: 'large',
-      width: 1024
+      name: 'high',
+      level: 9
     }]
   };
 
   var DEFAULT_UNIT_OPTIONS = {
     percentage: 'pc',
-    pixel: '',
     multiply: 'x'
   };
 
@@ -105,37 +101,30 @@ module.exports = function(grunt) {
   };
 
   /**
-   * Checks for a valid width and/or height.
-   * We do not need both - one is sufficient, but if a value is supplied it must be a valid value.
-   * If width is a percentage, height must also be a percentage - they cannot be mixed.
+   * Checks for a valid level.
    *
    * @private
-   * @param   {number/string}   width     The width, either as a number or a percentage (or as undefined)
-   * @param   {number/string}   height    The height, either as a number or a percentage (or as undefined)
-   * @return  {boolean}         Whether the size is valid.
+   * @param   {number/string}   level     The level, either as a number or a percentage
+   * @return  {boolean}         Whether the level is valid.
    */
-  var isValidSize = function(width, height) {
-    // Valid values = 1, '1px', '1', '1%', '1.1%', '11.11111%', '111111%'
+  var isValidLevel = function(level) {
+    // Valid values = 1, '1%', '1', '1%', '1.1%', '11.11111%', '111111%'
     // Invalid values = -1, '1.1.1%', '1a', 'a1'
     var pcRegExp = /^[0-9]*\.?[0-9]+%?$/,
       pxRegExp = /^[0-9]+(?:px)?$/,
       isValid = false;
 
-    if ((width || height)) {
+    if (level) {
       // check if we have a valid percentage value
-      if (!!(width || 0).toString().match(pcRegExp) &&
-        !!(height || 0).toString().match(pcRegExp)) {
+      if (!!(level || 0).toString().match(pcRegExp)) {
         isValid = true;
       // check if we have a valid pixel value
-      } else if (!!(width || 0).toString().match(pxRegExp) &&
-        !!(height || 0).toString().match(pxRegExp)) {
-        isValid = true;
       } else {
-        grunt.log.error('Width/height value is not valid. Percentages and pixels cannot be mixed.');
+        grunt.log.error('Level value is not valid.');
       }
 
     } else {
-      grunt.log.error('Either width and/or height must be specified.');
+      grunt.log.error('Level must be specified.');
     }
 
     return isValid;
@@ -149,27 +138,15 @@ module.exports = function(grunt) {
    * Create a name to suffix to our file.
    *
    * @private
-   * @param   {object}          properties Contains properties for name, width, height (where applicable)
+   * @param   {object}          properties Contains properties for name, level (where applicable)
    * @return  {string}          A new name
    */
   var getName = function(properties, options) {
-    var filename = '',
-      widthUnit = '',
-      heightUnit = '';
-
     // name takes precedence
     if (properties.name) {
       return properties.name;
-    } else {
-      // figure out the units for width and height (they can be different)
-      widthUnit = ((properties.width || 0).toString().indexOf('%') > 0) ? options.units.percentage : options.units.pixel;
-      heightUnit = ((properties.height || 0 ).toString().indexOf('%') > 0) ? options.units.percentage : options.units.pixel;
-
-      if (properties.width && properties.height) {
-        return parseFloat(properties.width) + widthUnit + options.units.multiply + parseFloat(properties.height) + heightUnit;
-      } else {
-        return (properties.width) ? parseFloat(properties.width) + widthUnit : parseFloat(properties.height) + heightUnit;
-      }
+    } else if (properties.level) {
+      return parseFloat(properties.level) + 'pc' + options.units.multiply;
     }
   };
 
@@ -217,7 +194,7 @@ module.exports = function(grunt) {
   var checkForSingleSource = function(files) {
     // more than 1 source.
     if (files.src.length > 1) {
-      return grunt.fail.warn('Unable to resize more than one image in compact or files object format.\n'+
+      return grunt.fail.warn('Unable to blur more than one image in compact or files object format.\n'+
       'For multiple files please use the files array format.\nSee http://gruntjs.com/configuring-tasks');
     }
   };
@@ -291,7 +268,7 @@ module.exports = function(grunt) {
    */
   var outputResult = function(count, name) {
     if (count) {
-      grunt.log.writeln('Resized ' + count.toString().cyan + ' ' +
+      grunt.log.writeln('Blurred ' + count.toString().cyan + ' ' +
       grunt.util.pluralize(count, 'file/files') + ' for ' + name);
     }
   };
@@ -307,73 +284,18 @@ module.exports = function(grunt) {
     return (!grunt.file.exists(dstPath));
   };
 
-  var processImage = function(srcPath, dstPath, sizeOptions, tally, callback) {
+  var processImage = function(srcPath, dstPath, blurOptions, tally, callback) {
     var image = gfxEngine(srcPath);
 
     image.identify(function(err, data) {
       if(err){
-        handleImageErrors(err, sizeOptions.engine);
+        handleImageErrors(err, blurOptions.engine);
       }
 
-      if (!isAnimatedGif(data, dstPath, sizeOptions.tryAnimated)) {
-      image.size(function(error, size) {
-        var sizingMethod = '';
-        var mode = 'resize';
-
-        if (error) {
-         handleImageErrors(error, sizeOptions.engine);
-        } else {
-
-        if (!sizeOptions.aspectRatio && sizeOptions.width && sizeOptions.height) {
-          // crop image
-          sizingMethod = '^';
-          mode = 'crop';
-        }
-
-        if (sizeOptions.width > size.width || sizeOptions.height > size.height) {
-          if (sizeOptions.upscale) {
-          // upscale
-          if (sizeOptions.aspectRatio) {
-            sizingMethod = '^';
-          } else {
-            sizingMethod = '!';
-          }
-          }
-
-          if (sizeOptions.createNoScaledImage) {
-            grunt.verbose.ok('Upscaled image ' + dstPath + ' will not be created');
-            return callback();
-          }
-        }
-
-
-        if (sizeOptions.filter) {
-          image.filter(sizeOptions.filter);
-        }
-
-        image
-          .resize(sizeOptions.width, sizeOptions.height, sizingMethod)
-          .quality(sizeOptions.quality);
-
-        if (mode === 'crop') {
-          image
-          .gravity(sizeOptions.gravity)
-          .crop(sizeOptions.width, sizeOptions.height, 0, 0);
-        }
-
-        image.write(dstPath, function (error) {
-          if (error) {
-            handleImageErrors(error, sizeOptions.engine);
-          } else {
-            grunt.verbose.ok('Responsive Image: ' + srcPath + ' now '+ dstPath);
-            tally[sizeOptions.id]++;
-          }
-          return callback();
-        });
-        }
-      });
+      if (!isAnimatedGif(data, dstPath, blurOptions.tryAnimated)) {
+        // Image blur adjust
       } else {
-      return callback();
+        return callback();
       }
     });
   };
@@ -385,28 +307,28 @@ module.exports = function(grunt) {
    * @private
    * @param   {string}          srcPath   The source path
    * @param   {string}          filename  Image Filename
-   * @param   {object}          sizeOptions
+   * @param   {object}          blurOptions
    * @param   {string}          customDest
    * @param   {string}          origCwd
    * @return                    The complete path and filename
    */
-  var getDestination = function(srcPath, dstPath, sizeOptions, customDest, origCwd) {
+  var getDestination = function(srcPath, dstPath, blurOptions, customDest, origCwd) {
     var baseName = '',
-      dirName = '',
-      extName = '';
+        dirName = '',
+        extName = '';
 
     extName = path.extname(dstPath);
     baseName = path.basename(dstPath, extName); // filename without extension
 
     if (customDest) {
 
-      sizeOptions.path = srcPath.replace(new RegExp(origCwd), "").replace(new RegExp(path.basename(srcPath)+"$"), "");
+      blurOptions.path = srcPath.replace(new RegExp(origCwd), "").replace(new RegExp(path.basename(srcPath)+"$"), "");
 
-      grunt.template.addDelimiters('size', '{%', '%}');
+      grunt.template.addDelimiters('level', '{%', '%}');
 
       dirName = grunt.template.process(customDest, {
-        delimiters: 'size',
-        data: sizeOptions
+        delimiters: 'level',
+        data: blurOptions
       });
 
       checkDirectoryExists(path.join(dirName));
@@ -414,13 +336,13 @@ module.exports = function(grunt) {
     } else {
       dirName = path.dirname(dstPath);
       checkDirectoryExists(path.join(dirName));
-      return path.join(dirName, baseName + sizeOptions.outputName + extName);
+      return path.join(dirName, baseName + blurOptions.outputName + extName);
     }
   };
 
   // let's get this party started
 
-  grunt.registerMultiTask('responsive_images', 'Create images at different sizes for responsive websites.', function() {
+  grunt.registerMultiTask('blurred_images', 'Produce blurred versions of images. Used to reproduce Medium blur-on-scroll effect.', function() {
 
     var done = this.async();
     var i = 0;
@@ -429,31 +351,31 @@ module.exports = function(grunt) {
     var tally = {};
     var task = this;
 
-    if (!isValidArray(options.sizes)) {
-      return grunt.fail.fatal('No sizes have been defined.');
+    if (!isValidArray(options.levels)) {
+      return grunt.fail.fatal('No levels have been defined.');
     }
 
     gfxEngine = getEngine(options.engine);
 
     options.units = _.extend(_.clone(DEFAULT_UNIT_OPTIONS), options.units);
 
-    options.sizes.forEach(function(s) {
+    options.levels.forEach(function(s) {
 
-      var sizeOptions = _.extend({}, options, s);
+      var blurOptions = _.extend({}, options, s);
 
-      if (!isValidSize(sizeOptions.width, sizeOptions.height)) {
+      if (!isValidLevel(blurOptions.levle)) {
         // allow task to be by-passed if no images
-        return grunt.log.warn('Size is invalid (' + sizeOptions.width + ', ' + sizeOptions.height + ')');
+        return grunt.log.warn('Level is invalid (' + blurOptions.level + ')');
       }
 
-      if (!isValidQuality(sizeOptions.quality)) {
+      if (!isValidQuality(blurOptions.quality)) {
         return grunt.log.warn('Quality configuration has changed to values between 1 - 100. Please update your configuration');
       }
 
-      sizeOptions.id = i;
+      blurOptions.id = i;
       i++;
 
-      tally[sizeOptions.id] = 0;
+      tally[blurOptions.id] = 0;
 
       if (task.files.length === 0) {
         return grunt.log.warn('Unable to compile; no valid source files were found.');
@@ -468,36 +390,36 @@ module.exports = function(grunt) {
           checkForValidTarget(f);
           checkForSingleSource(f);
 
-          // create a name for our image based on name, width, height
-          sizeOptions.name = getName({ name: sizeOptions.name, width: sizeOptions.width, height: sizeOptions.height }, options);
+          // create a name for our image based on name, level
+          blurOptions.name = getName({ name: blurOptions.name, level: blurOptions.level }, options);
 
           // create an output name with prefix, suffix
-          sizeOptions.outputName = addPrefixSuffix(sizeOptions.name, sizeOptions.separator, sizeOptions.suffix, sizeOptions.rename);
+          blurOptions.outputName = addPrefixSuffix(blurOptions.name, blurOptions.separator, blurOptions.suffix, blurOptions.rename);
 
           srcPath = f.src[0];
-          dstPath = getDestination(srcPath, f.dest, sizeOptions, f.custom_dest, f.orig.cwd);
+          dstPath = getDestination(srcPath, f.dest, blurOptions, f.custom_dest, f.orig.cwd);
 
           // remove pixels from the value so the gfx process doesn't complain
-          sizeOptions = removeCharsFromObjectValue(sizeOptions, ['width', 'height'], 'px');
+          blurOptions = removeCharsFromObjectValue(blurOptions, ['level'], '%');
 
           series.push(function(callback) {
 
-            if (sizeOptions.newFilesOnly) {
+            if (blurOptions.newFilesOnly) {
               if (isFileNewVersion(srcPath, dstPath)) {
-                return processImage(srcPath, dstPath, sizeOptions, tally, callback);
+                return processImage(srcPath, dstPath, blurOptions, tally, callback);
               } else {
                 grunt.verbose.ok('File already exists: ' + dstPath);
                 return callback();
               }
             } else {
-              return processImage(srcPath, dstPath, sizeOptions, tally, callback);
+              return processImage(srcPath, dstPath, blurOptions, tally, callback);
             }
 
           });
         });
 
         series.push(function(callback) {
-          outputResult(tally[sizeOptions.id], sizeOptions.name);
+          outputResult(tally[blurOptions.id], blurOptions.name);
           return callback();
         });
       }

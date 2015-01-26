@@ -7,17 +7,18 @@ module.exports = function(grunt) {
     blurred_images: {
       dev: {
         options: {
-          sizes: [{
-            width: 320,
-            name: 'small'
+          levels: [{
+            level: 1,
+            name: 'low'
           }, {
-            width: 640,
+            level: 5,
             name: 'medium'
           }, {
-            width: 800,
+            level: 10,
             name: 'large'
           }]
         },
+
         files: [{
           expand: true,
           src: ['assets/img/**/*.{jpg,gif,png}'],
@@ -26,6 +27,7 @@ module.exports = function(grunt) {
         }]
       }
     },
+
     connect: {
       dev: {
         options: {
@@ -34,6 +36,7 @@ module.exports = function(grunt) {
         }
       }
     },
+
     copy: {
       dev: {
         files: [{
@@ -44,15 +47,18 @@ module.exports = function(grunt) {
         }]
       }
     },
+
     watch: {
       options: {
         livereload: true
       },
+
       all_files: {
         expand: true,
         files: ['**/*', '!assets/img/**/*.*'],
         tasks: 'copy'
       },
+
       images: {
         expand: true,
         files: 'assets/img/**/*.{jpg,gif,png}',

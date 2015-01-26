@@ -1,6 +1,6 @@
 {
-  "name": "Responsive-Image-Demo",
-  "version": "0.0.2",
+  "name": "Blurred-Image-Demo",
+  "version": "0.0.1",
   "dependencies": {
     "grunt": "~0.4.1",
     "grunt-contrib-copy": "~0.4.1",
