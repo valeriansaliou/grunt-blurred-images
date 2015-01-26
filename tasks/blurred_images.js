@@ -8,7 +8,7 @@
  * Create images at different blur levels.
  *
  * @author Valérian Saliou (https://valeriansaliou.name/)
- * @version 0.1.0
+ * @version 1.0.0
  */
 
 'use strict';

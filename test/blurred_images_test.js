@@ -8,7 +8,7 @@
  * Test suite for Grunt Blurred Images
  *
  * @author Valérian Saliou (https://valeriansaliou.name/)
- * @version 1.0
+ * @version 1.0.0
  */
 
 
