@@ -1,5 +1,7 @@
 # grunt-blurred-image
 
+[![Gitter](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/valeriansaliou/grunt-blurred-images?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+
 > Produce blurred versions of images. Used to reproduce Medium blur-on-scroll effect.
 
 [![build status](https://ci.hakuma.holdings/projects/79/status.png?ref=master)](https://ci.hakuma.holdings/projects/79?ref=master)
