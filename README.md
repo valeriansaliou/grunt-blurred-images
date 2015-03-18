@@ -4,7 +4,7 @@
 
 > Produce blurred versions of images. Used to reproduce Medium blur-on-scroll effect.
 
-[![build status](https://ci.hakuma.holdings/projects/79/status.png?ref=master)](https://ci.hakuma.holdings/projects/79?ref=master)
+[![Build Status](https://semaphoreci.com/api/v1/projects/329f8630-4d49-4132-863b-05b94be5d642/376002/shields_badge.svg)](https://semaphoreci.com/valeriansaliou/grunt-blurred-images)
 
 ## Getting Started
 This plugin requires Grunt `~0.4.0`.
