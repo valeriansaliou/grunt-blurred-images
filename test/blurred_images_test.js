@@ -53,12 +53,12 @@
     var deferred = q.defer();
 
     // load created image
-    im(actualPath + filename).identify(function(error, actualProp) {
+    im.identify((actualPath + filename), function(error, actualProp) {
       if (error) {
         deferred.reject('Failed to load actual (created) image "' + actualPath + filename + '"');
       } else {
         // load expected image
-        im(expectedPath + filename).identify(function(error, expectedProp) {
+        im.identify((expectedPath + filename), function(error, expectedProp) {
           if (error) {
             deferred.reject('Failed to load expected image "' + expectedPath + filename + '"');
           } else {
