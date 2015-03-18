@@ -36,7 +36,7 @@
   'use strict';
 
   var async = require('async');
-  var gm    = require('gm');
+  var im    = require('imagemagick');
   var grunt = require('grunt');
   var q = require('q');
 
@@ -53,12 +53,12 @@
     var deferred = q.defer();
 
     // load created image
-    gm(actualPath + filename).identify(function(error, actualProp) {
+    im(actualPath + filename).identify(function(error, actualProp) {
       if (error) {
         deferred.reject('Failed to load actual (created) image "' + actualPath + filename + '"');
       } else {
         // load expected image
-        gm(expectedPath + filename).identify(function(error, expectedProp) {
+        im(expectedPath + filename).identify(function(error, expectedProp) {
           if (error) {
             deferred.reject('Failed to load expected image "' + expectedPath + filename + '"');
           } else {
