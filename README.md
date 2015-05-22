@@ -4,7 +4,7 @@
 
 > Produce blurred versions of images. Used to reproduce Medium blur-on-scroll effect.
 
-[![Build Status](https://travis-ci.org/valeriansaliou/grunt-blurred-image.svg?branch=master)](https://travis-ci.org/valeriansaliou/grunt-blurred-image)
+[![Build Status](https://travis-ci.org/valeriansaliou/grunt-blurred-images.svg?branch=master)](https://travis-ci.org/valeriansaliou/grunt-blurred-images)
 
 ## Getting Started
 This plugin requires Grunt `~0.4.0`.
