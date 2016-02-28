@@ -1,3 +1,4 @@
 demo/
 test/
+tmp/
 .jshintrc
